@@ -26,28 +26,39 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Accueil(),
+      home: Accueil("Mythic Quest"),
     );
   }
 }
 
 class Accueil extends StatelessWidget {
+  final String _title;
+
+  Accueil(this._title);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Text("<3 Purple Giraffe <3"),
-          Icon(
-            Icons.backup,
-            size: 50.0,
-            color: Colors.blue,
-            semanticLabel: "Upload vers le cloud",
-          ),
-          Text("<3 Purple Giraffe <3")
-        ],
-      ),
-    );
+        appBar: AppBar(),
+        body: Column(
+          children: [
+            Text("<3 $_title <3"),
+            Icon(
+              Icons.backup,
+              size: 50.0,
+              color: Colors.blue,
+              semanticLabel: "Upload vers le cloud",
+            ),
+            Text("<3 $_title <3"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.favorite, color: Colors.purpleAccent),
+                Text("$_title"),
+                Icon(Icons.favorite, color: Colors.purpleAccent),
+              ],
+            ),
+          ],
+        ));
   }
 }
