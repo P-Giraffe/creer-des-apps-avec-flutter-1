@@ -23,7 +23,19 @@ class _HomeState extends State<Home> {
           IconButton(
               icon: Icon(Icons.plus_one),
               iconSize: 50,
-              onPressed: _plusButtonClicked)
+              onPressed: _plusButtonClicked),
+          ElevatedButton.icon(
+              onPressed: _plusButtonClicked,
+              icon: Icon(Icons.plus_one),
+              label: Text("Ajouter un point")),
+          OutlineButton(
+            onPressed: _plusButtonClicked,
+            child: Text("Ajouter un point"),
+          ),
+          TextButton(
+            onPressed: _plusButtonClicked,
+            child: Text("Ajouter un point"),
+          )
         ],
       ),
     );
