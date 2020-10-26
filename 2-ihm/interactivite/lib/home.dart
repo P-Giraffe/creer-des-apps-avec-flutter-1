@@ -6,8 +6,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  var _score = 0;
   _plusButtonClicked() {
-    print("Bazinga!");
+    setState(() {
+      _score = _score + 1;
+    });
   }
 
   @override
@@ -16,6 +19,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(),
       body: Column(
         children: [
+          Text("Score : $_score"),
           IconButton(
               icon: Icon(Icons.plus_one),
               iconSize: 50,
