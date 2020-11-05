@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class GameScreen extends StatefulWidget {
@@ -11,7 +13,15 @@ class _GameScreenState extends State<GameScreen> {
 
   _startCounting() {
     setState(() {
+      _clickCount = 0;
       _isCounting = true;
+      Timer(Duration(seconds: 10), _stopGame);
+    });
+  }
+
+  _stopGame() {
+    setState(() {
+      _isCounting = false;
     });
   }
 
