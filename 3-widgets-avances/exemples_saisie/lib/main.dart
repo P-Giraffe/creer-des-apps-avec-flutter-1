@@ -39,11 +39,25 @@ class Accueil extends StatefulWidget {
 
 class _AccueilState extends State<Accueil> {
   var _prenom = "";
+  var _formkey = GlobalKey<FormState>();
+  var _controleurPrenom = TextEditingController();
 
   _prenomModifie(value) {
     setState(() {
       _prenom = value;
     });
+  }
+
+  _confirmerNouveauPrenom() {
+    if (_formkey.currentState.validate()) {
+      _formkey.currentState.save();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controleurPrenom.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,22 +67,32 @@ class _AccueilState extends State<Accueil> {
         body: Column(
           children: [
             Text("Prénom : $_prenom"),
-            Row(
-              children: [
-                Icon(Icons.person),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                        helperText: "Entrez votre prénom", hintText: "Prénom"),
-                    autocorrect: false,
-                    textCapitalization: TextCapitalization.words,
-                    autofillHints: [AutofillHints.givenName],
-                    keyboardType: TextInputType.name,
-                    onChanged: _prenomModifie,
-                    onSubmitted: _prenomModifie,
+            Form(
+              key: _formkey,
+              child: Row(
+                children: [
+                  Icon(Icons.person),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _controleurPrenom,
+                      //initialValue: "Ted",
+                      decoration: InputDecoration(
+                          helperText: "Entrez votre prénom",
+                          hintText: "Prénom"),
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.words,
+                      autofillHints: [AutofillHints.givenName],
+                      keyboardType: TextInputType.name,
+                      validator: (value) =>
+                          value.length > 2 ? null : "Prénom trop court",
+                      onSaved: _prenomModifie,
+                    ),
                   ),
-                ),
-              ],
+                  IconButton(
+                      icon: Icon(Icons.check),
+                      onPressed: _confirmerNouveauPrenom)
+                ],
+              ),
             )
           ],
         ));
