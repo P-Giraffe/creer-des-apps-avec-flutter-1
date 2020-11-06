@@ -54,6 +54,9 @@ class _AccueilState extends State<Accueil> {
           children: [
             Text("Prénom : $_prenom"),
             TextField(
+              autocorrect: false,
+              autofillHints: [AutofillHints.givenName],
+              keyboardType: TextInputType.name,
               onChanged: _prenomModifie,
               onSubmitted: _prenomModifie,
             )
