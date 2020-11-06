@@ -53,12 +53,22 @@ class _AccueilState extends State<Accueil> {
         body: Column(
           children: [
             Text("Prénom : $_prenom"),
-            TextField(
-              autocorrect: false,
-              autofillHints: [AutofillHints.givenName],
-              keyboardType: TextInputType.name,
-              onChanged: _prenomModifie,
-              onSubmitted: _prenomModifie,
+            Row(
+              children: [
+                Icon(Icons.person),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                        helperText: "Entrez votre prénom", hintText: "Prénom"),
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.words,
+                    autofillHints: [AutofillHints.givenName],
+                    keyboardType: TextInputType.name,
+                    onChanged: _prenomModifie,
+                    onSubmitted: _prenomModifie,
+                  ),
+                ),
+              ],
             )
           ],
         ));
