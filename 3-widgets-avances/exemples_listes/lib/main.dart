@@ -38,30 +38,27 @@ class Accueil extends StatefulWidget {
 }
 
 class _AccueilState extends State<Accueil> {
-  var _listeUrlImages = <String>[
-    "https://www.cesarsway.com/wp-content/uploads/2015/06/puppy-checklist.png",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSh_rmg-Zg5nmPaCdo_DrfkwQt1lL1qAlUiLQ&usqp=CAU",
-    "https://hips.hearstapps.com/countryliving.cdnds.net/17/47/1511194376-cavachon-puppy-christmas.jpg",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWApY7vpCoiyrYKL1FUsfNDwYUSNPTG5TZlQ&usqp=CAU",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTxuKzNrLE9lg7GzazWTob721eXrPKzPM8x3A&usqp=CAU",
-    "https://www.cesarsway.com/wp-content/uploads/2015/06/puppy-checklist.png",
-    "https://www.cesarsway.com/wp-content/uploads/2015/06/puppy-checklist.png",
-    "https://www.cesarsway.com/wp-content/uploads/2015/06/puppy-checklist.png",
-    "https://www.cesarsway.com/wp-content/uploads/2015/06/puppy-checklist.png",
-    "https://www.cesarsway.com/wp-content/uploads/2015/06/puppy-checklist.png",
-    "https://www.cesarsway.com/wp-content/uploads/2015/06/puppy-checklist.png",
-  ];
-
-  Widget _generateurDeLigne(BuildContext context, int numeroDeLigne) {
-    return Image.network(_listeUrlImages[numeroDeLigne]);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: ListView.builder(
-            itemCount: _listeUrlImages.length,
-            itemBuilder: _generateurDeLigne));
+      appBar: AppBar(),
+      body: SizedBox.expand(
+          child: Image.network(
+        "https://www.vets4pets.com/siteassets/species/dog/puppy/husky-puppy-on-dog-walk.jpg?w=585&scale=down",
+        fit: BoxFit.contain,
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Center(
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes
+                  : null,
+            ),
+          );
+        },
+      )),
+    );
   }
 }
