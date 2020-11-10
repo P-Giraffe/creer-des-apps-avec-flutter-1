@@ -55,6 +55,17 @@ class _GameScreenState extends State<GameScreen> {
     super.dispose();
   }
 
+  Widget _makeRowForResult(BuildContext context, int rowNumber) {
+    final result = _resultList[rowNumber];
+    return Row(
+      children: [
+        Text(result.playerName),
+        Icon(Icons.military_tech),
+        Text("${result.score} points")
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +87,10 @@ class _GameScreenState extends State<GameScreen> {
             if (_isCounting)
               IconButton(
                   icon: Icon(Icons.plus_one), onPressed: _clickButtonTouched),
-            Spacer(),
+            Expanded(
+                child: ListView.builder(
+                    itemCount: _resultList.length,
+                    itemBuilder: _makeRowForResult)),
             if (_isCounting == false)
               ElevatedButton(
                   onPressed: _startCounting,
