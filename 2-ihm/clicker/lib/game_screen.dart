@@ -10,6 +10,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   var _clickCount = 0;
   var _isCounting = false;
+  int _record = null;
 
   _startCounting() {
     setState(() {
@@ -22,6 +23,9 @@ class _GameScreenState extends State<GameScreen> {
   _stopGame() {
     setState(() {
       _isCounting = false;
+      if (_record == null || _clickCount > _record) {
+        _record = _clickCount;
+      }
     });
   }
 
@@ -41,6 +45,7 @@ class _GameScreenState extends State<GameScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (_record != null) Text("Record de points : $_record"),
             Text("Nombre de clics : $_clickCount"),
             if (_isCounting)
               IconButton(
