@@ -7,9 +7,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var _score = 0;
+  var _afficherLeBoutonTexte = true;
   _plusButtonClicked() {
     setState(() {
       _score = _score + 1;
+    });
+  }
+
+  _toggleButtonClicked() {
+    setState(() {
+      _afficherLeBoutonTexte = !_afficherLeBoutonTexte;
     });
   }
 
@@ -29,13 +36,15 @@ class _HomeState extends State<Home> {
               icon: Icon(Icons.plus_one),
               label: Text("Ajouter un point")),
           OutlineButton(
-            onPressed: _plusButtonClicked,
-            child: Text("Ajouter un point"),
+            onPressed: _toggleButtonClicked,
+            child: Text((_afficherLeBoutonTexte ? "Masquer" : "Afficher") +
+                " le bouton texte"),
           ),
-          TextButton(
-            onPressed: _plusButtonClicked,
-            child: Text("Ajouter un point"),
-          )
+          if (_afficherLeBoutonTexte)
+            TextButton(
+              onPressed: _plusButtonClicked,
+              child: Text("Ajouter un point"),
+            )
         ],
       ),
     );
