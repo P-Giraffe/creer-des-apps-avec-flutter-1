@@ -32,7 +32,15 @@ class _HomeState extends State<Home> {
           ElevatedButton(
               onPressed: _buttonClicked, child: Text("Lancer le chargement")),
           if (_donneesTrouvees != null) Text(_donneesTrouvees),
-          if (_isLoading) CircularProgressIndicator()
+          if (_isLoading) CircularProgressIndicator(),
+          FutureBuilder(
+            future: _fonctionDeChargement(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data);
+              }
+            },
+          )
         ],
       ),
     );
