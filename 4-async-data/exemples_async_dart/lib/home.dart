@@ -33,14 +33,6 @@ class _HomeState extends State<Home> {
               onPressed: _buttonClicked, child: Text("Lancer le chargement")),
           if (_donneesTrouvees != null) Text(_donneesTrouvees),
           if (_isLoading) CircularProgressIndicator(),
-          FutureBuilder(
-            future: _fonctionDeChargement(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data);
-              }
-            },
-          )
         ],
       ),
     );
