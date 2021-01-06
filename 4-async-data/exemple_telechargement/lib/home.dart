@@ -10,11 +10,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Future<User> _fetchData() async {
+  Future<List<User>> _fetchData() async {
     final response =
-        await http.get("https://jsonplaceholder.typicode.com/users/1");
+        await http.get("https://jsonplaceholder.typicode.com/users");
     if (response.statusCode == 200) {
-      return User.fromJSON(jsonDecode(response.body));
+      final List userJsonList = jsonDecode(response.body);
+      return userJsonList
+          .map((userJsonMap) => User.fromJSON(userJsonMap))
+          .toList();
     } else {
       throw Exception("Erreur de chargement des données");
     }
@@ -25,11 +28,16 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-          child: FutureBuilder<User>(
+          child: FutureBuilder<List<User>>(
         future: _fetchData(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data.email);
+            return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, userIndex) {
+                  final user = snapshot.data[userIndex];
+                  return Text(user.name);
+                });
           } else if (snapshot.hasError) {
             return Text("Erreur de chargement");
           } else {

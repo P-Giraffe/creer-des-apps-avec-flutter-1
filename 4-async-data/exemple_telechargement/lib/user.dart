@@ -6,6 +6,6 @@ class User {
   User({this.id, this.name, this.email});
   User.fromJSON(Map<String, dynamic> json)
       : id = json["id"],
-        name = json["username"],
+        name = json["name"],
         email = json["email"];
 }
