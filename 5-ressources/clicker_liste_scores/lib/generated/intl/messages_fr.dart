@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a en locale. All the
+// This is a library that provides messages for a fr locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -17,19 +17,19 @@ final messages = new MessageLookup();
 typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  String get localeName => 'en';
+  String get localeName => 'fr';
 
-  static m0(clickCount) => "Click count : ${clickCount}";
+  static m0(clickCount) => "Nombre de clics : ${clickCount}";
 
-  static m1(bestPlayerName, bestScore) => "Current best score : ${bestPlayerName} ${bestScore}";
+  static m1(bestPlayerName, bestScore) => "Record de points : ${bestPlayerName} ${bestScore}";
 
-  static m2(score) => "${Intl.plural(score, zero: 'no point', one: '1 point', other: '${score} points')}";
+  static m2(score) => "${Intl.plural(score, zero: 'Aucun point', one: '1 point', other: '${score} points')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "app_name" : MessageLookupByLibrary.simpleMessage("Clicker"),
     "click_count" : m0,
-    "game_start_button" : MessageLookupByLibrary.simpleMessage("Start counting"),
+    "game_start_button" : MessageLookupByLibrary.simpleMessage("Commencer à compter"),
     "point_record" : m1,
     "result_score_points" : m2
   };

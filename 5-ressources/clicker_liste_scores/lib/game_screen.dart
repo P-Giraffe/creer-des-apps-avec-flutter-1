@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clicker/Model/game_result.dart';
+import 'package:clicker/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class GameScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class _GameScreenState extends State<GameScreen> {
       children: [
         Text(result.playerName),
         Icon(Icons.military_tech),
-        Text("${result.score} points")
+        Text(S.of(context).result_score_points(result.score))
       ],
     );
   }
@@ -70,7 +71,7 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Clicker"),
+        title: Text(S.of(context).app_name),
       ),
       body: SafeArea(
         child: Column(
@@ -82,8 +83,8 @@ class _GameScreenState extends State<GameScreen> {
                   onChanged: _currentUsernameChanged,
                   controller: _currentNameFieldController),
             if (_bestScore != null)
-              Text("Record de points : $_bestPlayerName $_bestScore"),
-            Text("Nombre de clics : $_clickCount"),
+              Text(S.current.point_record(_bestPlayerName, _bestScore)),
+            Text(S.current.click_count(_clickCount)),
             if (_isCounting)
               IconButton(
                   icon: Icon(Icons.plus_one), onPressed: _clickButtonTouched),
@@ -94,7 +95,7 @@ class _GameScreenState extends State<GameScreen> {
             if (_isCounting == false)
               ElevatedButton(
                   onPressed: _startCounting,
-                  child: Text("Commencer à compter")),
+                  child: Text(S.of(context).game_start_button)),
           ],
         ),
       ),

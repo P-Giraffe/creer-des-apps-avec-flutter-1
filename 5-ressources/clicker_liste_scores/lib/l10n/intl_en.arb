@@ -1,1 +1,7 @@
-{}
+{
+  "game_start_button": "Start counting",
+  "point_record": "Current best score : {bestPlayerName} {bestScore}",
+  "click_count": "Click count : {clickCount}",
+  "result_score_points": "{score, plural, zero{no point} one{1 point} other{{score} points}}",
+  "app_name": "Clicker"
+}
