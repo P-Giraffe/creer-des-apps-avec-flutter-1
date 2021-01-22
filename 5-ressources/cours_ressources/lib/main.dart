@@ -52,8 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FutureBuilder<String>(
-              future:
-                  Assets.loadTextFile("text_files/lorem.txt", context: context),
+              future: Assets.loadTextFile(Assets.txt_lorem, context: context),
               builder: (context, snapshot) {
                 return Text(snapshot.hasData ? snapshot.data : "",
                     style: Theme.of(context)
@@ -72,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 100,
             ),
             Image(
-              image: AssetImage('images/logo.png'),
+              image: AssetImage(Assets.img_logo),
             )
           ],
         ),
