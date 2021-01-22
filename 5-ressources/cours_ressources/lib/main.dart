@@ -1,3 +1,4 @@
+import 'package:cours_ressources/assets_manager.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -50,12 +51,16 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-              style: Theme.of(context)
-                  .textTheme
-                  .caption
-                  .copyWith(color: Colors.red),
+            FutureBuilder<String>(
+              future:
+                  Assets.loadTextFile("text_files/lorem.txt", context: context),
+              builder: (context, snapshot) {
+                return Text(snapshot.hasData ? snapshot.data : "",
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption
+                        .copyWith(color: Colors.red));
+              },
             ),
             Text(
               '$_counter',
