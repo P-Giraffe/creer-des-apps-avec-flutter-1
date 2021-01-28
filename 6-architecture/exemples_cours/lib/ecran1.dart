@@ -1,3 +1,4 @@
+import 'package:exemples_cours/ecran2.dart';
 import 'package:flutter/material.dart';
 
 class Ecran1 extends StatelessWidget {
@@ -12,7 +13,10 @@ class Ecran1 extends StatelessWidget {
           children: [
             Text("Ecran 1"),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Ecran2()));
+              },
               child: Text("Aller vers l'Ecran 2"),
             )
           ],
