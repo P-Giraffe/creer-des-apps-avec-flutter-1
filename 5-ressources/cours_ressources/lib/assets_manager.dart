@@ -24,8 +24,8 @@ class Assets {
 
   static Future<dynamic> loadJSONFromFile(String filename,
       {BuildContext context}) {
-    return _bundle(context: context)
-        .loadStructuredData(filename, (fileContent) => jsonDecode(fileContent));
+    return _bundle(context: context).loadStructuredData(
+        filename, (fileContent) => Future.sync(() => jsonDecode(fileContent)));
   }
 
   static Future<ByteData> loadDataFromFile(String filname,
