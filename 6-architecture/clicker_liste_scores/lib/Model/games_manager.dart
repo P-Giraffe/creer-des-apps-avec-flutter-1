@@ -1,6 +1,7 @@
 import 'game.dart';
 
 class GamesManager {
+  static const gamesDuration = 10;
   Game? _currentGame;
   final List<Game> _previousGames = [];
 

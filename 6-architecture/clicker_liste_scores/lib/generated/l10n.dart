@@ -99,6 +99,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Enter your name en start a game`
+  String get before_game_text {
+    return Intl.message(
+      'Enter your name en start a game',
+      name: 'before_game_text',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

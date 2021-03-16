@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "app_name" : MessageLookupByLibrary.simpleMessage("Clicker"),
+    "before_game_text" : MessageLookupByLibrary.simpleMessage("Enter your name en start a game"),
     "click_count" : m0,
     "game_start_button" : MessageLookupByLibrary.simpleMessage("Start counting"),
     "point_record" : m1,

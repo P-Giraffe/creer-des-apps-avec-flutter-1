@@ -3,5 +3,6 @@
   "point_record": "Record de points : {bestPlayerName} {bestScore}",
   "click_count": "Nombre de clics : {clickCount}",
   "result_score_points": "{score, plural, zero{Aucun point} one{1 point} other{{score} points}}",
-  "app_name": "Clicker"
+  "app_name": "Clicker",
+  "before_game_text": "Entrez votre nom et démarrez une partie"
 }

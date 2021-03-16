@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clicker/Model/game.dart';
+import 'package:clicker/Model/games_manager.dart';
 import 'package:clicker/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -10,38 +11,26 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  final gamesManager = GamesManager();
   var _currentPlayerName = "";
-  var _clickCount = 0;
-  var _isCounting = false;
-  int? _bestScore = null;
-  var _bestPlayerName = "";
   var _currentNameFieldController = TextEditingController();
-  final List<Game> _resultList = [];
 
   _startCounting() {
     setState(() {
-      _clickCount = 0;
-      _isCounting = true;
-      Timer(Duration(seconds: 10), _stopGame);
+      gamesManager.startNewGame(userName: _currentPlayerName);
+      Timer(Duration(seconds: GamesManager.gamesDuration), _stopGame);
     });
   }
 
   _stopGame() {
     setState(() {
-      _isCounting = false;
-      final result = Game(_currentPlayerName, _clickCount);
-      _resultList.add(result);
-      final bestScore = _bestScore;
-      if (bestScore == null || _clickCount > bestScore) {
-        _bestScore = _clickCount;
-        _bestPlayerName = _currentPlayerName;
-      }
+      gamesManager.finishCurrentGame();
     });
   }
 
   _clickButtonTouched() {
     setState(() {
-      _clickCount++;
+      gamesManager.currentGame?.userScored();
     });
   }
 
@@ -57,20 +46,22 @@ class _GameScreenState extends State<GameScreen> {
     super.dispose();
   }
 
-  Widget _makeRowForResult(BuildContext context, int rowNumber) {
-    final result = _resultList[rowNumber];
-    return Row(
-      children: [
-        Text(result.playerName),
-        Icon(Icons.military_tech),
-        Text(S.of(context).result_score_points(result.score))
-      ],
-    );
-  }
+  // Widget _makeRowForResult(BuildContext context, int rowNumber) {
+  //   final result = _resultList[rowNumber];
+  //   return Row(
+  //     children: [
+  //       Text(result.playerName),
+  //       Icon(Icons.military_tech),
+  //       Text(S.of(context).result_score_points(result.score))
+  //     ],
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final bestScore = _bestScore;
+    final bestGame = gamesManager.bestGame;
+    final currentGame = gamesManager.currentGame;
+    bool isGameInProgress = gamesManager.isGameInProgress;
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).app_name),
@@ -79,22 +70,26 @@ class _GameScreenState extends State<GameScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (_isCounting == false)
+            if (isGameInProgress == false)
               TextField(
                   autocorrect: false,
                   onChanged: _currentUsernameChanged,
                   controller: _currentNameFieldController),
-            if (bestScore != null)
-              Text(S.current.point_record(_bestPlayerName, bestScore)),
-            Text(S.current.click_count(_clickCount)),
-            if (_isCounting)
+            if (bestGame != null)
+              Text(S.current.point_record(bestGame.playerName, bestGame.score)),
+            if (currentGame != null)
+              Text(S.current.click_count(currentGame.score))
+            else
+              Text(S.of(context).before_game_text),
+            if (isGameInProgress)
               IconButton(
                   icon: Icon(Icons.plus_one), onPressed: _clickButtonTouched),
-            Expanded(
-                child: ListView.builder(
-                    itemCount: _resultList.length,
-                    itemBuilder: _makeRowForResult)),
-            if (_isCounting == false)
+            Spacer(),
+            // Expanded(
+            //     child: ListView.builder(
+            //         itemCount: _resultList.length,
+            //         itemBuilder: _makeRowForResult)),
+            if (isGameInProgress == false)
               ElevatedButton(
                   onPressed: _startCounting,
                   child: Text(S.of(context).game_start_button)),
