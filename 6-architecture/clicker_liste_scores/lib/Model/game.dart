@@ -1,4 +1,4 @@
-class Game {
+class Game implements Comparable<Game> {
   final String playerName;
   int _score;
   bool _isInProgress = false;
@@ -21,5 +21,10 @@ class Game {
 
   finish() {
     _isInProgress = false;
+  }
+
+  @override
+  int compareTo(Game other) {
+    return this.score.compareTo(other.score);
   }
 }

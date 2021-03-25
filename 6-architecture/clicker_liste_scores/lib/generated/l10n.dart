@@ -109,6 +109,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Hall of fame`
+  String get hall_of_fame {
+    return Intl.message(
+      'Hall of fame',
+      name: 'hall_of_fame',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

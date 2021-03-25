@@ -44,7 +44,11 @@ class Ecran1 extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Ecran2()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Ecran2(
+                              title: "",
+                            )));
               },
               child: Text("Aller vers l'Ecran 2"),
             )

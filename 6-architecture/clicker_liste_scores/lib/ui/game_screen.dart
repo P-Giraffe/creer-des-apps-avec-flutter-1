@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:clicker/Model/game.dart';
 import 'package:clicker/Model/games_manager.dart';
 import 'package:clicker/generated/l10n.dart';
+import 'package:clicker/ui/hall_of_fame_screen.dart';
 import 'package:flutter/material.dart';
 
 class GameScreen extends StatefulWidget {
@@ -46,17 +47,6 @@ class _GameScreenState extends State<GameScreen> {
     super.dispose();
   }
 
-  // Widget _makeRowForResult(BuildContext context, int rowNumber) {
-  //   final result = _resultList[rowNumber];
-  //   return Row(
-  //     children: [
-  //       Text(result.playerName),
-  //       Icon(Icons.military_tech),
-  //       Text(S.of(context).result_score_points(result.score))
-  //     ],
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     final bestGame = gamesManager.bestGame;
@@ -83,12 +73,17 @@ class _GameScreenState extends State<GameScreen> {
               Text(S.of(context).before_game_text),
             if (isGameInProgress)
               IconButton(
-                  icon: Icon(Icons.plus_one), onPressed: _clickButtonTouched),
+                  icon: Icon(Icons.plus_one), onPressed: _clickButtonTouched)
+            else
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          HallOfFameScreen(gameList: gamesManager.bestGameList),
+                    ));
+                  },
+                  child: Text(S.of(context).hall_of_fame)),
             Spacer(),
-            // Expanded(
-            //     child: ListView.builder(
-            //         itemCount: _resultList.length,
-            //         itemBuilder: _makeRowForResult)),
             if (isGameInProgress == false)
               ElevatedButton(
                   onPressed: _startCounting,

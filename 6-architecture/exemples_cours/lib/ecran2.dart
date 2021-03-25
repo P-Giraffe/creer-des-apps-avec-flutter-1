@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Ecran2 extends StatelessWidget {
   final String title;
 
-  const Ecran2({Key key, this.title}) : super(key: key);
+  const Ecran2({Key? key, required this.title}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

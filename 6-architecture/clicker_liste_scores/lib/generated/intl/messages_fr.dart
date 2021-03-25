@@ -31,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "before_game_text" : MessageLookupByLibrary.simpleMessage("Entrez votre nom et démarrez une partie"),
     "click_count" : m0,
     "game_start_button" : MessageLookupByLibrary.simpleMessage("Commencer à compter"),
+    "hall_of_fame" : MessageLookupByLibrary.simpleMessage("Hall of fame"),
     "point_record" : m1,
     "result_score_points" : m2
   };

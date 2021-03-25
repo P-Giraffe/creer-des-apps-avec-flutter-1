@@ -5,6 +5,12 @@ class GamesManager {
   Game? _currentGame;
   final List<Game> _previousGames = [];
 
+  List<Game> get bestGameList {
+    final sortedList = List<Game>.from(_previousGames);
+    sortedList.sort((game1, game2) => game2.compareTo(game1));
+    return sortedList;
+  }
+
   Game? get currentGame => _currentGame;
   Game? get bestGame {
     Game? topGame;
