@@ -5,7 +5,13 @@ import 'game.dart';
 class GamesManager {
   static const gamesDuration = 10;
   Game? _currentGame;
-  final List<Game> _previousGames = [];
+  List<Game> _previousGames = [];
+  final GamesLocalDataManager _localDataManager = GamesLocalDataManager();
+
+  Future<List<Game>> loadGamesListFromLocalData() async {
+    _previousGames = await _localDataManager.getGamesList();
+    return _previousGames;
+  }
 
   List<Game> get bestGameList {
     final sortedList = List<Game>.from(_previousGames);
@@ -40,6 +46,7 @@ class GamesManager {
     if (game != null) {
       game.finish();
       _previousGames.add(game);
+      _localDataManager.addNewGame(game);
     }
   }
 }
