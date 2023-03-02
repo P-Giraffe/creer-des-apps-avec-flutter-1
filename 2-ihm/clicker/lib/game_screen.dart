@@ -10,7 +10,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   var _clickCount = 0;
   var _isCounting = false;
-  int _record = null;
+  int? _record;
 
   _startCounting() {
     setState(() {
@@ -23,7 +23,8 @@ class _GameScreenState extends State<GameScreen> {
   _stopGame() {
     setState(() {
       _isCounting = false;
-      if (_record == null || _clickCount > _record) {
+      final record = _record;
+      if (record == null || _clickCount > record) {
         _record = _clickCount;
       }
     });
@@ -37,6 +38,7 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final record = _record;
     return Scaffold(
       appBar: AppBar(
         title: Text("Clicker"),
@@ -45,7 +47,7 @@ class _GameScreenState extends State<GameScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (_record != null) Text("Record de points : $_record"),
+            if (record != null) Text("Record de points : $record"),
             Text("Nombre de clics : $_clickCount"),
             if (_isCounting)
               IconButton(

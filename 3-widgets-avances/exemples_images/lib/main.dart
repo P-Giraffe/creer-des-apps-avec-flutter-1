@@ -44,7 +44,7 @@ class _AccueilState extends State<Accueil> {
       appBar: AppBar(),
       body: SizedBox.expand(
           child: Image.network(
-        "https://www.vets4pets.com/siteassets/species/dog/puppy/husky-puppy-on-dog-walk.jpg?w=585&scale=down",
+        "http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcRVHbxZ43m13mQuaaX_T36vQn1MZUApQbpC_0N5r0OCLsf5jgBbnPsjwPvz9uG2YX1r4P_USbwEItaKOCCkeU8",
         fit: BoxFit.contain,
         loadingBuilder: (BuildContext context, Widget child,
             ImageChunkEvent loadingProgress) {

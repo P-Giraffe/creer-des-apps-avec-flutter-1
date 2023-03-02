@@ -28,11 +28,13 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ElevatedButton(
-              onPressed: _buttonClicked, child: Text("Lancer le chargement")),
+              onPressed: _isLoading ? null : _buttonClicked,
+              child: Text("Lancer le chargement")),
           if (_donneesTrouvees != null) Text(_donneesTrouvees),
-          if (_isLoading) CircularProgressIndicator(),
+          if (_isLoading) Center(child: CircularProgressIndicator()),
         ],
       ),
     );
