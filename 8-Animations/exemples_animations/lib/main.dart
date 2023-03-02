@@ -48,8 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text('You have pushed the button this many times:')
                 .animate()
-                .slideX(delay: 1.2.seconds)
-                .fade(),
+                .slideX(delay: 1.2.seconds, begin: -1.5),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
