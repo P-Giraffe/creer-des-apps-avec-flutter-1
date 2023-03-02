@@ -46,9 +46,12 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:')
+            const Text("J'aime Purple Giraffe")
                 .animate()
-                .slideX(delay: 1.2.seconds, begin: -1.5),
+                .slideX(delay: 1.2.seconds, begin: -2.5)
+                .fade()
+                .then()
+                .tint(color: Colors.purple),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
