@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 void main() {
+  Animate.restartOnHotReload = true;
   runApp(const MyApp());
 }
 
@@ -47,7 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text('You have pushed the button this many times:')
                 .animate()
-                .slideX(delay: 1.seconds),
+                .slideX(delay: 1.2.seconds)
+                .fade(),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
