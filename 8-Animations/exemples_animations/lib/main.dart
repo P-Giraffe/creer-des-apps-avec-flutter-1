@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -47,8 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text("J'aime Purple Giraffe")
-                .animate()
-                .slideX(delay: 1.2.seconds, begin: -2.5)
+                .animate(
+                  delay: 1.2.seconds,
+                  onPlay: (controller) => controller.repeat(reverse: true),
+                )
+                .slideX(begin: -2.5)
                 .fade()
                 .then()
                 .tint(color: Colors.purple),
