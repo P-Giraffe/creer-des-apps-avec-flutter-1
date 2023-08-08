@@ -1,5 +1,5 @@
+import 'package:demo/ui/components/image_et_texte.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,12 +43,12 @@ class _AccueilState extends State<Accueil> {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSh_rmg-Zg5nmPaCdo_DrfkwQt1lL1qAlUiLQ&usqp=CAU",
     "https://hips.hearstapps.com/countryliving.cdnds.net/17/47/1511194376-cavachon-puppy-christmas.jpg",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTWApY7vpCoiyrYKL1FUsfNDwYUSNPTG5TZlQ&usqp=CAU",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTxuKzNrLE9lg7GzazWTob721eXrPKzPM8x3A&usqp=CAU",
-    "https://www.cesarsway.com/wp-content/uploads/2015/06/puppy-checklist.png",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTxuKzNrLE9lg7GzazWTob721eXrPKzPM8x3A&usqp=CAU"
   ];
 
   Widget _generateurDeLigne(BuildContext context, int numeroDeLigne) {
-    return Image.network(_listeUrlImages[numeroDeLigne]);
+    final urlImage = _listeUrlImages[numeroDeLigne];
+    return ImageEtTexte(image: urlImage);
   }
 
   @override

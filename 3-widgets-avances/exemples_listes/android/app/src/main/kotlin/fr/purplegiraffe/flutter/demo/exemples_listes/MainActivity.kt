@@ -1,4 +1,4 @@
-package com.example.demo
+package fr.purplegiraffe.flutter.demo.exemples_listes
 
 import io.flutter.embedding.android.FlutterActivity
 
