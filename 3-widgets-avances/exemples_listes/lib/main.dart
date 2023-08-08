@@ -48,7 +48,10 @@ class _AccueilState extends State<Accueil> {
 
   Widget _generateurDeLigne(BuildContext context, int numeroDeLigne) {
     final urlImage = _listeUrlImages[numeroDeLigne];
-    return ImageEtTexte(image: urlImage);
+    return ImageEtTexte(
+      image: urlImage,
+      title: "Toutou $numeroDeLigne",
+    );
   }
 
   @override
