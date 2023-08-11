@@ -61,8 +61,25 @@ class _AccueilState extends State<Accueil> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        body: ListView.builder(
-            itemCount: _listeUrlImages.length,
-            itemBuilder: _generateurDeLigne));
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                    itemCount: _listeUrlImages.length,
+                    itemBuilder: _generateurDeLigne),
+              ),
+              FilledButton(
+                  onPressed: _supprimerToutesLesPhotos,
+                  child: const Text("Supprimer toutes les photos"))
+            ],
+          ),
+        ));
+  }
+
+  void _supprimerToutesLesPhotos() {
+    setState(() {
+      _listeUrlImages.clear();
+    });
   }
 }
