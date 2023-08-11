@@ -1,4 +1,5 @@
 import 'package:demo/ui/components/image_et_texte.dart';
+import 'package:extension_flutter_tools/extension_flutter_tools.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -69,9 +70,18 @@ class _AccueilState extends State<Accueil> {
                     itemCount: _listeUrlImages.length,
                     itemBuilder: _generateurDeLigne),
               ),
-              FilledButton(
-                  onPressed: _supprimerToutesLesPhotos,
-                  child: const Text("Supprimer toutes les photos"))
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ConfirmWrapper(
+                    confirmationQuestionText:
+                        "Voulez vous vraiment supprimer tous ces chiots si mignons ?",
+                    confirmationYesText: "Oui, les supprimer",
+                    confirmationNoText: "Non, il faut les sauver",
+                    childBuilder: (onTap) => FilledButton(
+                        onPressed: onTap,
+                        child: const Text("Supprimer toutes les photos")),
+                    onConfirm: _supprimerToutesLesPhotos),
+              )
             ],
           ),
         ));

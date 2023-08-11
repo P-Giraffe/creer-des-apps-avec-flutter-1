@@ -24,6 +24,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  extension_flutter_tools:
+    git: https://github.com/maxbritto/extension_flutter_tools.git
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
