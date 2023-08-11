@@ -51,6 +51,9 @@ class _AccueilState extends State<Accueil> {
     return ImageEtTexte(
       image: urlImage,
       title: "Toutou $numeroDeLigne",
+      onClick: () {
+        print("Clic sur le toutou $numeroDeLigne");
+      },
     );
   }
 
