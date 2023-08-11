@@ -33,12 +33,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Accueil extends StatefulWidget {
+class Accueil extends StatelessWidget {
   @override
-  _AccueilState createState() => _AccueilState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(),
+        body: SafeArea(
+          child: _AccueilBody(),
+        ));
+  }
 }
 
-class _AccueilState extends State<Accueil> {
+class _AccueilBody extends StatefulWidget {
+  const _AccueilBody({super.key});
+
+  @override
+  State<_AccueilBody> createState() => __AccueilBodyState();
+}
+
+class __AccueilBodyState extends State<_AccueilBody> {
   var _listeUrlImages = <String>[
     "https://www.cesarsway.com/wp-content/uploads/2015/06/puppy-checklist.png",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSh_rmg-Zg5nmPaCdo_DrfkwQt1lL1qAlUiLQ&usqp=CAU",
@@ -58,38 +71,34 @@ class _AccueilState extends State<Accueil> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(),
-        body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                    itemCount: _listeUrlImages.length,
-                    itemBuilder: _generateurDeLigne),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ConfirmWrapper(
-                    confirmationQuestionText:
-                        "Voulez vous vraiment supprimer tous ces chiots si mignons ?",
-                    confirmationYesText: "Oui, les supprimer",
-                    confirmationNoText: "Non, il faut les sauver",
-                    childBuilder: (onTap) => FilledButton(
-                        onPressed: onTap,
-                        child: const Text("Supprimer toutes les photos")),
-                    onConfirm: _supprimerToutesLesPhotos),
-              )
-            ],
-          ),
-        ));
-  }
-
   void _supprimerToutesLesPhotos() {
     setState(() {
       _listeUrlImages.clear();
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+              itemCount: _listeUrlImages.length,
+              itemBuilder: _generateurDeLigne),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ConfirmWrapper(
+              confirmationQuestionText:
+                  "Voulez vous vraiment supprimer tous ces chiots si mignons ?",
+              confirmationYesText: "Oui, les supprimer",
+              confirmationNoText: "Non, il faut les sauver",
+              childBuilder: (onTap) => FilledButton(
+                  onPressed: onTap,
+                  child: const Text("Supprimer toutes les photos")),
+              onConfirm: _supprimerToutesLesPhotos),
+        )
+      ],
+    );
   }
 }
