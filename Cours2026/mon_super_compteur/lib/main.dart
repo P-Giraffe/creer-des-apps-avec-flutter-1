@@ -39,9 +39,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _incrementCounter() {
-    print('Clic sur le bouton');
     setState(() {
       _counter = _counter + 1;
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      _counter = _counter - 1;
     });
   }
 
@@ -92,13 +97,32 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             if (_counter > 10) Text('Ca commence à faire du bruit !'),
+            const SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                  onPressed: _decrementCounter,
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                  ),
+                  child: const Icon(Icons.remove),
+                ),
+                const SizedBox(width: 16),
+                FilledButton(
+                  onPressed: _incrementCounter,
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
+                  ),
+                  child: const Icon(Icons.add, size: 28),
+                ),
+              ],
+            ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
