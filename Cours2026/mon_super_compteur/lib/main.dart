@@ -99,17 +99,18 @@ class _MyHomePageState extends State<MyHomePage> {
             if (_counter > 10) Text('Ca commence à faire du bruit !'),
             const SizedBox(height: 32),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: .center,
               children: [
-                OutlinedButton(
+                OutlinedButton.icon(
                   onPressed: _decrementCounter,
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.all(16),
                   ),
-                  child: const Icon(Icons.remove),
+                  icon: const Icon(Icons.remove, size: 28),
+                  label: const Text('Diminuer le compteur'),
                 ),
                 const SizedBox(width: 16),
-                FilledButton(
+                FilledButton.icon(
                   onPressed: _incrementCounter,
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
@@ -117,7 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       vertical: 16,
                     ),
                   ),
-                  child: const Icon(Icons.add, size: 28),
+                  icon: const Icon(Icons.add, size: 28),
+                  label: const Text('Augmenter le compteur'),
                 ),
               ],
             ),
