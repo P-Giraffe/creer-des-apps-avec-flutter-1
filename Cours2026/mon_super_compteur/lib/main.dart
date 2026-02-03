@@ -101,26 +101,28 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: .center,
               children: [
-                Flexible(
-                  child: IconButton.outlined(
-                    onPressed: _decrementCounter,
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.all(16),
-                    ),
-                    icon: const Icon(Icons.remove, size: 28),
+                IconButton.outlined(
+                  onPressed: _decrementCounter,
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
                   ),
+                  icon: const Icon(Icons.remove, size: 28),
                 ),
                 const SizedBox(width: 16),
-                FilledButton.icon(
-                  onPressed: _incrementCounter,
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: _incrementCounter,
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
+                    ),
+                    icon: const Icon(Icons.add, size: 28),
+                    label: const Text(
+                      "Augmenter le compteur de 1 parce que c'est top",
                     ),
                   ),
-                  icon: const Icon(Icons.add, size: 28),
-                  label: const Text('Augmenter le compteur'),
                 ),
               ],
             ),
