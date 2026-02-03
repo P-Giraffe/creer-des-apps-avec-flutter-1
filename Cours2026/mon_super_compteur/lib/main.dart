@@ -101,13 +101,14 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: .center,
               children: [
-                OutlinedButton.icon(
-                  onPressed: _decrementCounter,
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.all(16),
+                Flexible(
+                  child: IconButton.outlined(
+                    onPressed: _decrementCounter,
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.all(16),
+                    ),
+                    icon: const Icon(Icons.remove, size: 28),
                   ),
-                  icon: const Icon(Icons.remove, size: 28),
-                  label: const Text('Diminuer le compteur'),
                 ),
                 const SizedBox(width: 16),
                 FilledButton.icon(
