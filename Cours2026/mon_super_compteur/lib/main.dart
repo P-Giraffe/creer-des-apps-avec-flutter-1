@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,10 +32,17 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String _counterName = '';
   bool _isEditingCounterName = false;
+  int? _goal;
 
   void _onCounterNameChanged(String value) {
     setState(() {
       _counterName = value;
+    });
+  }
+
+  void _onGoalChanged(String value) {
+    setState(() {
+      _goal = int.tryParse(value);
     });
   }
 
@@ -71,14 +79,33 @@ class _MyHomePageState extends State<MyHomePage> {
             if (_isEditingCounterName)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: TextField(
-                  decoration: const InputDecoration(
-                    labelText: 'Nom du compteur',
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: _onCounterNameChanged,
-                  onSubmitted: (_) => _toggleEditingCounterName(),
-                  onTapOutside: (_) => _toggleEditingCounterName(),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      initialValue: _counterName,
+                      decoration: const InputDecoration(
+                        labelText: 'Nom du compteur',
+                        border: OutlineInputBorder(),
+                      ),
+                      onChanged: _onCounterNameChanged,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      initialValue: _goal?.toString(),
+                      decoration: const InputDecoration(
+                        labelText: 'Objectif',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: _onGoalChanged,
+                    ),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                      onPressed: _toggleEditingCounterName,
+                      child: const Text('Valider'),
+                    ),
+                  ],
                 ),
               )
             else
@@ -97,6 +124,27 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             if (_counter > 10) Text('Ca commence à faire du bruit !'),
+            if (_isEditingCounterName == false && _goal != null && _goal! > 0)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32.0,
+                  vertical: 16.0,
+                ),
+                child: Column(
+                  children: [
+                    LinearProgressIndicator(
+                      value: (_counter / _goal!).clamp(0.0, 1.0),
+                      minHeight: 10,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '$_counter / $_goal',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
             const SizedBox(height: 32),
             Row(
               mainAxisAlignment: .center,
