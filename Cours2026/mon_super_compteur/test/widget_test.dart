@@ -19,6 +19,26 @@ void main() {
     expect(find.text('Commencer à compter'), findsOneWidget);
   });
 
+  testWidgets('Back button navigates to WelcomeScreen',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    // Navigate to counter screen
+    await tester.tap(find.text('Commencer à compter'));
+    await tester.pumpAndSettle();
+
+    // Verify we are on the counter screen
+    expect(find.text('Mes Petits Totaux'), findsOneWidget);
+
+    // Tap the back button
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+
+    // Verify we are back on the welcome screen
+    expect(find.text('Commencer à compter'), findsOneWidget);
+    expect(find.textContaining('comptez vos objectifs'), findsOneWidget);
+  });
+
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
 

@@ -91,6 +91,13 @@ class _CounterScreenState extends State<CounterScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       child: Row(
         children: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back, color: colorScheme.primary),
+          ),
+          const SizedBox(width: 8),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
