@@ -11,9 +11,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mon_super_compteur/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Welcome screen displays title and button',
+      (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
+
+    expect(find.textContaining('comptez vos objectifs'), findsOneWidget);
+    expect(find.text('Commencer à compter'), findsOneWidget);
+  });
+
+  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    // Navigate to counter screen
+    await tester.tap(find.text('Commencer à compter'));
+    await tester.pumpAndSettle();
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
