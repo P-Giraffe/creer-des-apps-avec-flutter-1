@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import 'welcome_screen.dart';
+import 'router.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key, GoRouter? router}) : _router = router ?? createRouter();
+
+  final GoRouter _router;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Mes Petits Totaux',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Roboto',
       ),
-      home: const WelcomeScreen(),
+      routerConfig: _router,
     );
   }
 }

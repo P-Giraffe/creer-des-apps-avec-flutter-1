@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 class CounterScreen extends StatefulWidget {
-  const CounterScreen({super.key, required this.title});
-
-  final String title;
+  const CounterScreen({super.key});
 
   @override
   State<CounterScreen> createState() => _CounterScreenState();
@@ -93,7 +92,7 @@ class _CounterScreenState extends State<CounterScreen> {
         children: [
           IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
             icon: Icon(Icons.arrow_back, color: colorScheme.primary),
           ),

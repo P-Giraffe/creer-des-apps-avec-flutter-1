@@ -13,7 +13,7 @@ import 'package:mon_super_compteur/main.dart';
 void main() {
   testWidgets('Welcome screen displays title and button',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp());
 
     expect(find.textContaining('comptez vos objectifs'), findsOneWidget);
     expect(find.text('Commencer à compter'), findsOneWidget);
@@ -21,7 +21,7 @@ void main() {
 
   testWidgets('Back button navigates to WelcomeScreen',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp());
 
     // Navigate to counter screen
     await tester.tap(find.text('Commencer à compter'));
@@ -40,7 +40,7 @@ void main() {
   });
 
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp());
 
     // Navigate to counter screen
     await tester.tap(find.text('Commencer à compter'));
@@ -57,5 +57,23 @@ void main() {
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
+  });
+
+  testWidgets('GoRouter navigates from welcome to counter screen',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+
+    // Verify we start on the welcome screen
+    expect(find.text('Commencer à compter'), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_back), findsNothing);
+
+    // Tap the button to navigate
+    await tester.tap(find.text('Commencer à compter'));
+    await tester.pumpAndSettle();
+
+    // Verify we are on the counter screen
+    expect(find.text('Mes Petits Totaux'), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+    expect(find.text('0'), findsOneWidget);
   });
 }

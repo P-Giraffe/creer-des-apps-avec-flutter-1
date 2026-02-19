@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'counter_screen.dart';
+import 'package:go_router/go_router.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -42,13 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                 const SizedBox(height: 48),
                 FilledButton.icon(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const CounterScreen(title: 'Mes Petits Totaux'),
-                      ),
-                    );
+                    context.push('/counter');
                   },
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
