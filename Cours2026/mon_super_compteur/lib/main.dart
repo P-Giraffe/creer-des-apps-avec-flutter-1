@@ -6,6 +6,7 @@ import 'models/counter_service.dart';
 import 'ui/router.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 

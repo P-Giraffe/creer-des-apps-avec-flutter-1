@@ -7,13 +7,41 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import 'package:mon_super_compteur/data_source/counter_database_data_source.dart';
 import 'package:mon_super_compteur/main.dart';
+import 'package:mon_super_compteur/models/counter_service.dart';
+import 'package:mon_super_compteur/ui/router.dart';
+
+/// Source de données du test courant, conservée pour pouvoir la refermer entre
+/// deux tests et repartir d'un stockage vierge.
+late CounterDatabaseDataSource _dataSource;
+
+/// Construit l'application sur une base SQLite en mémoire, afin que les tests
+/// s'exécutent sans vrai appareil. La fabrique « sans isolat » est utilisée car
+/// les tests widget s'exécutent dans une zone asynchrone simulée où les timers
+/// de l'isolat de la base ne progressent pas.
+MyApp _buildApp() {
+  _dataSource = CounterDatabaseDataSource(
+    databaseFactory: databaseFactoryFfiNoIsolate,
+    databasePath: inMemoryDatabasePath,
+  );
+  return MyApp(router: createRouter(CounterService(_dataSource)));
+}
 
 void main() {
+  setUpAll(() {
+    sqfliteFfiInit();
+  });
+
+  tearDown(() async {
+    await _dataSource.close();
+  });
+
   testWidgets('Welcome screen shows the create button and empty state',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(_buildApp());
     await tester.pumpAndSettle();
 
     expect(find.textContaining('comptez vos objectifs'), findsOneWidget);
@@ -23,7 +51,7 @@ void main() {
 
   testWidgets('Creating a counter navigates to its screen at value 0',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(_buildApp());
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Nouveau compteur'));
@@ -37,7 +65,7 @@ void main() {
 
   testWidgets('Back button returns to the welcome list with the new counter',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(_buildApp());
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Nouveau compteur'));
@@ -52,7 +80,7 @@ void main() {
   });
 
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(_buildApp());
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Nouveau compteur'));
@@ -73,7 +101,7 @@ void main() {
 
   testWidgets('Deleting a counter asks for confirmation then returns home',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(_buildApp());
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Nouveau compteur'));

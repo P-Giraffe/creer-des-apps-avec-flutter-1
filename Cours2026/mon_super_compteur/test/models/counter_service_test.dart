@@ -1,12 +1,27 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mon_super_compteur/data_source/counter_database_data_source.dart';
 import 'package:mon_super_compteur/models/counter_service.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
+  late CounterDatabaseDataSource dataSource;
   late CounterService service;
 
+  setUpAll(() {
+    sqfliteFfiInit();
+  });
+
   setUp(() {
-    service = CounterService(CounterDatabaseDataSource());
+    // Base SQLite en mémoire, recréée vierge pour chaque test.
+    dataSource = CounterDatabaseDataSource(
+      databaseFactory: databaseFactoryFfi,
+      databasePath: inMemoryDatabasePath,
+    );
+    service = CounterService(dataSource);
+  });
+
+  tearDown(() async {
+    await dataSource.close();
   });
 
   test('loadCounters is empty at start', () async {
