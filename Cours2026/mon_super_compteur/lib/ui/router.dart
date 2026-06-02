@@ -9,11 +9,14 @@ GoRouter createRouter(CounterService service) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const WelcomeScreen(),
+        builder: (context, state) => WelcomeScreen(service: service),
       ),
       GoRoute(
-        path: '/counter',
-        builder: (context, state) => CounterScreen(service: service),
+        path: '/counter/:id',
+        builder: (context, state) => CounterScreen(
+          service: service,
+          counterId: int.parse(state.pathParameters['id']!),
+        ),
       ),
     ],
   );

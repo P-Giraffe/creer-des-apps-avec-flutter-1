@@ -18,6 +18,11 @@ class CounterService {
     return _dataSource.loadCounters();
   }
 
+  /// Charge un compteur précis par son identifiant, ou null s'il n'existe pas.
+  Future<Counter?> loadCounter(int id) {
+    return _dataSource.loadCounter(id);
+  }
+
   /// Crée un nouveau compteur (valeur initiale 0) et retourne le compteur créé
   /// avec l'identifiant attribué par la source de données.
   Future<Counter> createCounter({String name = '', int? goal}) {
@@ -61,15 +66,5 @@ class CounterService {
   /// Supprime le compteur fourni.
   Future<void> deleteCounter(Counter counter) async {
     await _dataSource.deleteCounter(counter.id!);
-  }
-
-  /// Pont temporaire pour l'interface graphique actuelle, qui ne sait afficher
-  /// qu'un seul compteur. Retourne le premier compteur existant, ou en crée un
-  /// si la liste est vide. À supprimer lorsque l'interface multi-compteur,
-  /// fondée sur [loadCounters], aura remplacé l'écran unique.
-  Future<Counter> loadDefaultCounter() async {
-    final counters = await _dataSource.loadCounters();
-    final counter = counters.isEmpty ? await createCounter() : counters.first;
-    return counter;
   }
 }

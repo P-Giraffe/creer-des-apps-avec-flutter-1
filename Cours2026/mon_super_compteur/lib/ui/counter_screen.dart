@@ -6,9 +6,14 @@ import '../models/counter.dart';
 import '../models/counter_service.dart';
 
 class CounterScreen extends StatefulWidget {
-  const CounterScreen({super.key, required this.service});
+  const CounterScreen({
+    super.key,
+    required this.service,
+    required this.counterId,
+  });
 
   final CounterService service;
+  final int counterId;
 
   @override
   State<CounterScreen> createState() => _CounterScreenState();
@@ -25,7 +30,7 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   void _loadCounter() async {
-    final counter = await widget.service.loadDefaultCounter();
+    final counter = await widget.service.loadCounter(widget.counterId);
     setState(() {
       _counter = counter;
     });
@@ -66,6 +71,38 @@ class _CounterScreenState extends State<CounterScreen> {
     setState(() {
       _isEditingCounterName = !_isEditingCounterName;
     });
+  }
+
+  void _confirmDelete() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Supprimer ce compteur ?'),
+          content: const Text(
+            'Cette action est définitive : le compteur et sa valeur seront '
+            'perdus.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => dialogContext.pop(false),
+              child: const Text('Annuler'),
+            ),
+            FilledButton(
+              onPressed: () => dialogContext.pop(true),
+              child: const Text('Supprimer'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true && mounted) {
+      await widget.service.deleteCounter(_counter!);
+      if (mounted) {
+        context.pop();
+      }
+    }
   }
 
   @override
@@ -161,6 +198,11 @@ class _CounterScreenState extends State<CounterScreen> {
                 ),
               ],
             ),
+          ),
+          IconButton(
+            onPressed: _confirmDelete,
+            icon: Icon(Icons.delete_outline, color: Colors.red.shade400),
+            tooltip: 'Supprimer le compteur',
           ),
         ],
       ),

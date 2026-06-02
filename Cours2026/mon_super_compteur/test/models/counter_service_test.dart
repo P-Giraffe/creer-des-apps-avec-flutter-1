@@ -99,25 +99,24 @@ void main() {
     expect(counters.first.id, second.id);
   });
 
-  group('loadDefaultCounter', () {
-    test('creates a counter when the list is empty', () async {
-      final counter = await service.loadDefaultCounter();
+  group('loadCounter', () {
+    test('returns the counter matching the id', () async {
+      await service.createCounter(name: 'Pompes');
+      final second = await service.createCounter(name: 'Tractions');
 
-      expect(counter.id, isNotNull);
-      expect(counter.value, 0);
+      final loaded = await service.loadCounter(second.id!);
 
-      final counters = await service.loadCounters();
-      expect(counters, hasLength(1));
+      expect(loaded, isNotNull);
+      expect(loaded!.id, second.id);
+      expect(loaded.name, 'Tractions');
     });
 
-    test('returns the existing counter without creating a new one', () async {
-      final first = await service.loadDefaultCounter();
-      final second = await service.loadDefaultCounter();
+    test('returns null for an unknown id', () async {
+      await service.createCounter(name: 'Pompes');
 
-      expect(second.id, first.id);
+      final loaded = await service.loadCounter(999);
 
-      final counters = await service.loadCounters();
-      expect(counters, hasLength(1));
+      expect(loaded, isNull);
     });
   });
 }
