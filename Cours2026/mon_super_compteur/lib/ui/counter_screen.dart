@@ -2,40 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import '../models/counter.dart';
+import '../models/counter_service.dart';
+
 class CounterScreen extends StatefulWidget {
-  const CounterScreen({super.key});
+  const CounterScreen({super.key, required this.service});
+
+  final CounterService service;
 
   @override
   State<CounterScreen> createState() => _CounterScreenState();
 }
 
 class _CounterScreenState extends State<CounterScreen> {
-  int _counter = 0;
-  String _counterName = '';
+  Counter? _counter;
   bool _isEditingCounterName = false;
-  int? _goal;
 
-  void _onCounterNameChanged(String value) {
+  @override
+  void initState() {
+    super.initState();
+    _loadCounter();
+  }
+
+  void _loadCounter() async {
+    final counter = await widget.service.loadCounter();
     setState(() {
-      _counterName = value;
+      _counter = counter;
     });
   }
 
-  void _onGoalChanged(String value) {
+  void _onCounterNameChanged(String value) async {
+    final updated = await widget.service.rename(_counter!, value);
     setState(() {
-      _goal = int.tryParse(value);
+      _counter = updated;
     });
   }
 
-  void _incrementCounter() {
+  void _onGoalChanged(String value) async {
+    final updated = await widget.service.updateGoal(
+      _counter!,
+      int.tryParse(value),
+    );
     setState(() {
-      _counter = _counter + 1;
+      _counter = updated;
     });
   }
 
-  void _decrementCounter() {
+  void _incrementCounter() async {
+    final updated = await widget.service.increment(_counter!);
     setState(() {
-      _counter = _counter - 1;
+      _counter = updated;
+    });
+  }
+
+  void _decrementCounter() async {
+    final updated = await widget.service.decrement(_counter!);
+    setState(() {
+      _counter = updated;
     });
   }
 
@@ -45,12 +68,11 @@ class _CounterScreenState extends State<CounterScreen> {
     });
   }
 
-  bool get _isGoalReached => _goal != null && _goal! > 0 && _counter >= _goal!;
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final successColor = Colors.green.shade600;
+    final counter = _counter;
 
     return Scaffold(
       body: Container(
@@ -66,18 +88,21 @@ class _CounterScreenState extends State<CounterScreen> {
           ),
         ),
         child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(context),
-              Expanded(
-                child: _isEditingCounterName
-                    ? _buildEditingView(context)
-                    : _buildCounterView(context, successColor),
-              ),
-              if (_isEditingCounterName == false) _buildControlButtons(context),
-              const SizedBox(height: 32),
-            ],
-          ),
+          child: counter == null
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    _buildHeader(context),
+                    Expanded(
+                      child: _isEditingCounterName
+                          ? _buildEditingView(context, counter)
+                          : _buildCounterView(context, successColor, counter),
+                    ),
+                    if (_isEditingCounterName == false)
+                      _buildControlButtons(context),
+                    const SizedBox(height: 32),
+                  ],
+                ),
         ),
       ),
     );
@@ -142,7 +167,7 @@ class _CounterScreenState extends State<CounterScreen> {
     );
   }
 
-  Widget _buildEditingView(BuildContext context) {
+  Widget _buildEditingView(BuildContext context, Counter counter) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return SingleChildScrollView(
@@ -179,7 +204,7 @@ class _CounterScreenState extends State<CounterScreen> {
             ),
             const SizedBox(height: 24),
             TextFormField(
-              initialValue: _counterName,
+              initialValue: counter.name,
               decoration: InputDecoration(
                 labelText: 'Nom du compteur',
                 hintText: 'Ex: Pompes, Verres d\'eau...',
@@ -194,7 +219,7 @@ class _CounterScreenState extends State<CounterScreen> {
             ),
             const SizedBox(height: 20),
             TextFormField(
-              initialValue: _goal?.toString(),
+              initialValue: counter.goal?.toString(),
               decoration: InputDecoration(
                 labelText: 'Objectif',
                 hintText: 'Nombre à atteindre',
@@ -230,30 +255,36 @@ class _CounterScreenState extends State<CounterScreen> {
     );
   }
 
-  Widget _buildCounterView(BuildContext context, Color successColor) {
+  Widget _buildCounterView(
+    BuildContext context,
+    Color successColor,
+    Counter counter,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
-    final displayColor = _isGoalReached ? successColor : colorScheme.primary;
+    final displayColor = counter.isGoalReached
+        ? successColor
+        : colorScheme.primary;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (_counterName.isNotEmpty) ...[
+          if (counter.name.isNotEmpty) ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_isGoalReached)
+                if (counter.isGoalReached)
                   Icon(Icons.check_circle, color: successColor, size: 24),
-                if (_isGoalReached) const SizedBox(width: 8),
+                if (counter.isGoalReached) const SizedBox(width: 8),
                 Flexible(
                   child: Text(
-                    _counterName,
+                    counter.name,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
-                      color: _isGoalReached
+                      color: counter.isGoalReached
                           ? successColor
                           : Colors.grey.shade700,
                     ),
@@ -293,7 +324,7 @@ class _CounterScreenState extends State<CounterScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: _isGoalReached
+                colors: counter.isGoalReached
                     ? [
                         successColor.withValues(alpha: 0.1),
                         successColor.withValues(alpha: 0.2),
@@ -313,13 +344,13 @@ class _CounterScreenState extends State<CounterScreen> {
             ),
             child: Center(
               child: Text(
-                '$_counter',
+                '${counter.value}',
                 style: TextStyle(
                   fontSize: 72,
                   fontWeight: FontWeight.bold,
                   foreground: Paint()
                     ..shader = LinearGradient(
-                      colors: _isGoalReached
+                      colors: counter.isGoalReached
                           ? [successColor, successColor.withValues(alpha: 0.8)]
                           : [colorScheme.primary, colorScheme.secondary],
                     ).createShader(const Rect.fromLTWH(0, 0, 150, 80)),
@@ -328,7 +359,7 @@ class _CounterScreenState extends State<CounterScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          if (_counter > 10)
+          if (counter.value > 10)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
@@ -356,17 +387,23 @@ class _CounterScreenState extends State<CounterScreen> {
               ),
             ),
           const SizedBox(height: 24),
-          if (_goal != null && _goal! > 0)
-            _buildProgressSection(context, successColor),
+          if (counter.goal != null && counter.goal! > 0)
+            _buildProgressSection(context, successColor, counter),
         ],
       ),
     );
   }
 
-  Widget _buildProgressSection(BuildContext context, Color successColor) {
+  Widget _buildProgressSection(
+    BuildContext context,
+    Color successColor,
+    Counter counter,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
-    final progress = (_counter / _goal!).clamp(0.0, 1.0);
-    final progressColor = _isGoalReached ? successColor : colorScheme.primary;
+    final progress = (counter.value / counter.goal!).clamp(0.0, 1.0);
+    final progressColor = counter.isGoalReached
+        ? successColor
+        : colorScheme.primary;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -389,13 +426,15 @@ class _CounterScreenState extends State<CounterScreen> {
               Row(
                 children: [
                   Icon(
-                    _isGoalReached ? Icons.emoji_events : Icons.flag,
+                    counter.isGoalReached ? Icons.emoji_events : Icons.flag,
                     color: progressColor,
                     size: 22,
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    _isGoalReached ? 'Objectif atteint !' : 'Progression',
+                    counter.isGoalReached
+                        ? 'Objectif atteint !'
+                        : 'Progression',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -414,7 +453,7 @@ class _CounterScreenState extends State<CounterScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  '$_counter / $_goal',
+                  '${counter.value} / ${counter.goal}',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
