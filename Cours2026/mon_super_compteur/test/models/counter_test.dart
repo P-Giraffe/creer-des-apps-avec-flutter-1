@@ -54,5 +54,19 @@ void main() {
 
       expect(counter.value, 3);
     });
+
+    test('keeps the id by default', () {
+      const counter = Counter(id: 7, name: 'Pompes', value: 3);
+      final updated = counter.copyWith(value: 4);
+
+      expect(updated.id, 7);
+    });
+
+    test('replaces the id when one is provided', () {
+      const counter = Counter(name: 'Pompes', value: 3);
+      final updated = counter.copyWith(id: 42);
+
+      expect(updated.id, 42);
+    });
   });
 }

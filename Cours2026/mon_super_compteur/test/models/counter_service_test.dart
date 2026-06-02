@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mon_super_compteur/data_source/counter_database_data_source.dart';
-import 'package:mon_super_compteur/models/counter.dart';
 import 'package:mon_super_compteur/models/counter_service.dart';
 
 void main() {
@@ -10,53 +9,115 @@ void main() {
     service = CounterService(CounterDatabaseDataSource());
   });
 
-  test('loadCounter returns the default counter at start', () async {
-    final counter = await service.loadCounter();
+  test('loadCounters is empty at start', () async {
+    final counters = await service.loadCounters();
 
-    expect(counter.value, 0);
-    expect(counter.name, '');
-    expect(counter.goal, isNull);
+    expect(counters, isEmpty);
   });
 
-  test('increment raises the value and persists it', () async {
-    final incremented = await service.increment(const Counter(value: 4));
-    expect(incremented.value, 5);
+  test('createCounter stores a counter with an id and value 0', () async {
+    final created = await service.createCounter(name: 'Pompes', goal: 10);
 
-    final reloaded = await service.loadCounter();
-    expect(reloaded.value, 5);
+    expect(created.id, isNotNull);
+    expect(created.name, 'Pompes');
+    expect(created.value, 0);
+    expect(created.goal, 10);
+
+    final counters = await service.loadCounters();
+    expect(counters, hasLength(1));
+    expect(counters.first.id, created.id);
+  });
+
+  test('increment raises the value of the targeted counter only', () async {
+    final first = await service.createCounter(name: 'Pompes');
+    final second = await service.createCounter(name: 'Tractions');
+
+    await service.increment(first);
+
+    final reloadedFirst = await service.loadCounters().then(
+      (counters) => counters.firstWhere((c) => c.id == first.id),
+    );
+    final reloadedSecond = await service.loadCounters().then(
+      (counters) => counters.firstWhere((c) => c.id == second.id),
+    );
+
+    expect(reloadedFirst.value, 1);
+    expect(reloadedSecond.value, 0);
   });
 
   test('decrement lowers the value and persists it', () async {
-    final decremented = await service.decrement(const Counter(value: 4));
-    expect(decremented.value, 3);
+    final created = await service.createCounter(name: 'Pompes');
+    final incremented = await service.increment(created);
 
-    final reloaded = await service.loadCounter();
-    expect(reloaded.value, 3);
+    final decremented = await service.decrement(incremented);
+    expect(decremented.value, 0);
+
+    final reloaded = await service.loadCounters();
+    expect(reloaded.first.value, 0);
   });
 
-  test('rename updates the name and persists it', () async {
-    final renamed = await service.rename(const Counter(value: 2), 'Pompes');
+  test('rename updates the name while keeping the id', () async {
+    final created = await service.createCounter();
+
+    final renamed = await service.rename(created, 'Pompes');
     expect(renamed.name, 'Pompes');
-    expect(renamed.value, 2);
+    expect(renamed.id, created.id);
 
-    final reloaded = await service.loadCounter();
-    expect(reloaded.name, 'Pompes');
+    final reloaded = await service.loadCounters();
+    expect(reloaded.first.name, 'Pompes');
   });
 
-  test('updateGoal sets the goal and persists it', () async {
-    final withGoal = await service.updateGoal(const Counter(value: 2), 10);
-    expect(withGoal.goal, 10);
+  test('updateGoal sets the goal while keeping the id', () async {
+    final created = await service.createCounter();
 
-    final reloaded = await service.loadCounter();
-    expect(reloaded.goal, 10);
+    final withGoal = await service.updateGoal(created, 10);
+    expect(withGoal.goal, 10);
+    expect(withGoal.id, created.id);
+
+    final reloaded = await service.loadCounters();
+    expect(reloaded.first.goal, 10);
   });
 
   test('updateGoal can clear the goal back to null', () async {
-    final cleared = await service.updateGoal(
-      const Counter(value: 2, goal: 10),
-      null,
-    );
+    final created = await service.createCounter(goal: 10);
 
+    final cleared = await service.updateGoal(created, null);
     expect(cleared.goal, isNull);
+
+    final reloaded = await service.loadCounters();
+    expect(reloaded.first.goal, isNull);
+  });
+
+  test('deleteCounter removes the counter from the list', () async {
+    final first = await service.createCounter(name: 'Pompes');
+    final second = await service.createCounter(name: 'Tractions');
+
+    await service.deleteCounter(first);
+
+    final counters = await service.loadCounters();
+    expect(counters, hasLength(1));
+    expect(counters.first.id, second.id);
+  });
+
+  group('loadDefaultCounter', () {
+    test('creates a counter when the list is empty', () async {
+      final counter = await service.loadDefaultCounter();
+
+      expect(counter.id, isNotNull);
+      expect(counter.value, 0);
+
+      final counters = await service.loadCounters();
+      expect(counters, hasLength(1));
+    });
+
+    test('returns the existing counter without creating a new one', () async {
+      final first = await service.loadDefaultCounter();
+      final second = await service.loadDefaultCounter();
+
+      expect(second.id, first.id);
+
+      final counters = await service.loadCounters();
+      expect(counters, hasLength(1));
+    });
   });
 }

@@ -25,7 +25,7 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   void _loadCounter() async {
-    final counter = await widget.service.loadCounter();
+    final counter = await widget.service.loadDefaultCounter();
     setState(() {
       _counter = counter;
     });

@@ -6,15 +6,22 @@ import 'counter.dart';
 ///
 /// L'interface graphique ne communique jamais directement avec la source de
 /// données : elle passe toujours par ce service, qui porte la logique métier
-/// (incrémenter, décrémenter…) et délègue la persistance à la source de données.
+/// (créer, incrémenter, supprimer…) et délègue la persistance à la source de
+/// données.
 class CounterService {
   CounterService(this._dataSource);
 
   final CounterDatabaseDataSource _dataSource;
 
-  /// Charge le compteur courant.
-  Future<Counter> loadCounter() {
-    return _dataSource.loadCounter();
+  /// Charge la liste de tous les compteurs.
+  Future<List<Counter>> loadCounters() {
+    return _dataSource.loadCounters();
+  }
+
+  /// Crée un nouveau compteur (valeur initiale 0) et retourne le compteur créé
+  /// avec l'identifiant attribué par la source de données.
+  Future<Counter> createCounter({String name = '', int? goal}) {
+    return _dataSource.createCounter(Counter(name: name, goal: goal));
   }
 
   /// Incrémente la valeur du compteur, persiste et retourne le compteur à jour.
@@ -39,14 +46,30 @@ class CounterService {
   }
 
   /// Met à jour l'objectif (éventuellement à null), persiste et retourne le
-  /// compteur à jour.
+  /// compteur à jour. L'identifiant est conservé.
   Future<Counter> updateGoal(Counter current, int? goal) async {
     final updated = Counter(
+      id: current.id,
       name: current.name,
       value: current.value,
       goal: goal,
     );
     await _dataSource.saveCounter(updated);
     return updated;
+  }
+
+  /// Supprime le compteur fourni.
+  Future<void> deleteCounter(Counter counter) async {
+    await _dataSource.deleteCounter(counter.id!);
+  }
+
+  /// Pont temporaire pour l'interface graphique actuelle, qui ne sait afficher
+  /// qu'un seul compteur. Retourne le premier compteur existant, ou en crée un
+  /// si la liste est vide. À supprimer lorsque l'interface multi-compteur,
+  /// fondée sur [loadCounters], aura remplacé l'écran unique.
+  Future<Counter> loadDefaultCounter() async {
+    final counters = await _dataSource.loadCounters();
+    final counter = counters.isEmpty ? await createCounter() : counters.first;
+    return counter;
   }
 }
