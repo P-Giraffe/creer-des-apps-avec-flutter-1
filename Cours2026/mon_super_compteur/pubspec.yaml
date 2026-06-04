@@ -38,6 +38,10 @@ dependencies:
   sqflite: ^2.4.3
   path: ^1.9.1
 
+  # IA locale via les APIs natives de l'OS (FoundationModels iOS 26+, ML Kit
+  # GenAI Android 26+). Utilisée uniquement par la couche data_source.
+  flutter_local_ai: ^0.0.6
+
 
 dev_dependencies:
   flutter_test:

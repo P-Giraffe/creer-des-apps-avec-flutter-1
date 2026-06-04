@@ -10,9 +10,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'package:mon_super_compteur/data_source/counter_database_data_source.dart';
+import 'package:mon_super_compteur/data_source/local_ai_data_source.dart';
 import 'package:mon_super_compteur/main.dart';
 import 'package:mon_super_compteur/models/counter_service.dart';
+import 'package:mon_super_compteur/models/local_ai_service.dart';
 import 'package:mon_super_compteur/ui/router.dart';
+
+import 'fakes/fake_local_ai_engine.dart';
 
 /// Source de données du test courant, conservée pour pouvoir la refermer entre
 /// deux tests et repartir d'un stockage vierge.
@@ -27,7 +31,14 @@ MyApp _buildApp() {
     databaseFactory: databaseFactoryFfiNoIsolate,
     databasePath: inMemoryDatabasePath,
   );
-  return MyApp(router: createRouter(CounterService(_dataSource)));
+  // Le service d'IA est branché avec un moteur factice : les tests widget ne
+  // sollicitent pas l'IA, mais le router en exige une instance.
+  final localAiService = LocalAiService(
+    LocalAiDataSource(engine: FakeLocalAiEngine()),
+  );
+  return MyApp(
+    router: createRouter(CounterService(_dataSource), localAiService),
+  );
 }
 
 void main() {

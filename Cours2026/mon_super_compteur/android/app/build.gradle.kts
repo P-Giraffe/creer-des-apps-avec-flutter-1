@@ -24,7 +24,8 @@ android {
         applicationId = "com.example.mon_super_compteur"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // minSdk relevé à 26 : prérequis de flutter_local_ai (ML Kit GenAI).
+        minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -41,4 +42,10 @@ android {
 
 flutter {
     source = "../.."
+}
+
+// Dépendances natives requises par flutter_local_ai (ML Kit GenAI / AICore).
+dependencies {
+    implementation("com.google.mlkit:genai-prompt:1.0.0-alpha1")
+    implementation("com.google.android.gms:play-services-tasks:18.0.2")
 }

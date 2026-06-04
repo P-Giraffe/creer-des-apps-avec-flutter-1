@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'data_source/counter_database_data_source.dart';
+import 'data_source/local_ai_data_source.dart';
 import 'models/counter_service.dart';
+import 'models/local_ai_service.dart';
 import 'ui/router.dart';
 
 void main() {
@@ -13,7 +15,11 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key, GoRouter? router})
     : _router =
-          router ?? createRouter(CounterService(CounterDatabaseDataSource()));
+          router ??
+          createRouter(
+            CounterService(CounterDatabaseDataSource()),
+            LocalAiService(LocalAiDataSource()),
+          );
 
   final GoRouter _router;
 

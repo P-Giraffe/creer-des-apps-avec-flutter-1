@@ -3,6 +3,10 @@
         android:label="mon_super_compteur"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- Requis par flutter_local_ai (ML Kit GenAI). non bloquant : l'app
+             démarre même si AICore n'est pas installé, la disponibilité se
+             vérifie ensuite via isAvailable(). -->
+        <uses-library android:name="com.google.android.aicore" android:required="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
